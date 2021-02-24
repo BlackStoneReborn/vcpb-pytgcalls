@@ -100,15 +100,12 @@ async def playtg(bot: Bot, message: Message):
     #if not message.audio:
         #await message.reply_text(f"`Reply to a Audio-File!`")
         #return
-    res, name, out, song = await vcpb.tgfile(message)
+    res, name, out = await vcpb.tgfile(message)
     if not res:
         await message.reply_text(f"`Something went wrong!`")
         return
     
     await vcpb.join(message.chat.id, f"{message.chat.id}.raw")
-    if song:
-        await message.reply_text(f"`Now playing: [{song}]`")
-    else:
-        await message.reply_text(f"`Now playing: TG-File`")
+    await message.reply_text(f"`Now playing: TG-File`")
 
 bot.run()
