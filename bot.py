@@ -1,6 +1,6 @@
 from pyrogram import Client as Bot, filters
 from pyrogram.types import Message
-
+from asyncio import sleep
 import vcpb
 from helpers import is_youtube
 from config import API_ID, API_HASH, BOT_TOKEN
@@ -62,9 +62,8 @@ async def youtube(bot: Bot, message: Message):
     else:
         message = await message.reply_text("Downloading...")
         file_path = (await vcpb.youtube(url))[1]
-        await asyncio.sleep(1)
+        await sleep(2)
         message = await message.edit_text("Joining...")
-        await asyncio.sleep(1)
         await vcpb.join(message.chat.id, file_path)
         await message.edit_text(f"`[{file_path}] Playing...`")
 
@@ -88,6 +87,7 @@ async def playfile(bot: Bot, message: Message):
     if not file_path:
         await message.reply_text("Give me a file.")
     else:
+        await sleep(2)
         await vcpb.join(message.chat.id, file_path)
         await message.reply_text(f"`[{file_path}] Playing...`")
 
