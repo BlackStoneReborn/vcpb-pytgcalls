@@ -21,7 +21,7 @@ bot = Bot(
 )
 async def leave(bot: Bot, message: Message):
     await vcpb.leave(message.chat.id)
-    await message.delete()
+    await message.reply_text("Left.")
 
 
 @bot.on_message(
@@ -31,7 +31,7 @@ async def leave(bot: Bot, message: Message):
 )
 async def pause(bot: Bot, message: Message):
     await vcpb.pause(message.chat.id)
-    await message.delete()
+    await message.reply_text("Paused.")
 
 
 @bot.on_message(
@@ -41,7 +41,7 @@ async def pause(bot: Bot, message: Message):
 )
 async def resume(bot: Bot, message: Message):
     await vcpb.resume(message.chat.id)
-    await message.delete()
+    await message.reply_text("Resumed.")
 
 
 @bot.on_message(
@@ -62,8 +62,9 @@ async def youtube(bot: Bot, message: Message):
     else:
         message = await message.reply_text("Downloading...")
         file_path = (await vcpb.youtube(url))[1]
+        await asyncio.sleep(1)
         message = await message.edit_text("Joining...")
-
+        await asyncio.sleep(1)
         await vcpb.join(message.chat.id, file_path)
         await message.edit_text(f"`[{file_path}] Playing...`")
 
@@ -104,7 +105,7 @@ async def playtg(bot: Bot, message: Message):
     if not res:
         await message.reply_text(f"`{out}`")
         return
-    
+    await asyncio.sleep(1)
     await vcpb.join(message.chat.id, name)
     await message.reply_text(f"`Now playing: TG-File`")
 
