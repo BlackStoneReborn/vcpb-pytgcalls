@@ -102,7 +102,7 @@ async def playtg(bot: Bot, message: Message):
         #return
     res, name, out = await vcpb.tgfile(message)
     if not res:
-        await message.reply_text(f"`Something went wrong!`")
+        await message.reply_text(f"`{out}`")
         return
     
     await vcpb.join(message.chat.id, f"{message.chat.id}.raw")
