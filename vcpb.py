@@ -108,8 +108,6 @@ async def youtube(url: str):
 
 async def tgfile(message: str):
     file_namey = f"{message.chat.id}.raw"
-    if message.audio.title:
-        song = message.audio.title
     await message.reply_to_message.download(file_name=f"{message.chat.id}.mp3")
     proc = await asyncio.create_subprocess_shell(
         'ffmpeg -i url -f s16le -ac 2 -ar 48000 -acodec pcm_s16le output'.replace(
@@ -125,9 +123,6 @@ async def tgfile(message: str):
     result = stdout or stderr
 
     if proc.returncode == 0:
-        if song:
-            return True, file_name, result, song
-        else:
-            return True, file_name, result
+        return True, file_name, result
 
     return False, file_name, result
