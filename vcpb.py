@@ -115,7 +115,7 @@ async def tgfile(message: str):
         'ffmpeg -i url -f s16le -ac 2 -ar 48000 -acodec pcm_s16le output'.replace(
             "url",
             f"{message.chat.id}.mp3"
-        ).replace("output", file_name),
+        ).replace("output", file_namey),
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE
     )
