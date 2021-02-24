@@ -113,7 +113,7 @@ async def tgfile(message: str):
         'ffmpeg -i url -f s16le -ac 2 -ar 48000 -acodec pcm_s16le output'.replace(
             "url",
             original
-        ).replace("output", file_namey).replace("'\n", ""),
+        ).replace("output", file_namey),
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE
     )
@@ -123,6 +123,6 @@ async def tgfile(message: str):
     result = stdout or stderr
 
     if proc.returncode == 0:
-        return True, file_namey, result
+        return True, f"'{file_namey}'", result
 
     return False, file_namey, result
