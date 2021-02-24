@@ -66,7 +66,9 @@ async def youtube(bot: Bot, message: Message):
         file_path = (await vcpb.youtube(url))[1]
         while not os.path.isfile(file_path):
             await message.reply_text(f"Sleeping (since {slept}) seconds...")
+            sleep(1)
             slept += 1
+        sleep(3)
         await message.edit_text("Joining...")
         await vcpb.join(message.chat.id, file_path)
         await message.edit_text(f"`[{file_path}] Playing...`")
