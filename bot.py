@@ -105,7 +105,7 @@ async def playtg(bot: Bot, message: Message):
     if not res:
         await message.reply_text(f"`{out}`")
         return
-    await asyncio.sleep(1)
+    await sleep(1)
     await vcpb.join(message.chat.id, name)
     await message.reply_text(f"`Now playing: TG-File`")
 
