@@ -97,9 +97,9 @@ async def playfile(bot: Bot, message: Message):
     & ~ filters.edited
 )
 async def playtg(bot: Bot, message: Message):
-    if not message.audio:
-        await message.reply_text(f"`Reply to a Audio-File!`")
-        return
+    #if not message.audio:
+        #await message.reply_text(f"`Reply to a Audio-File!`")
+        #return
     res, name, out, song = await vcpb.tgfile(message)
     if not res:
         await message.reply_text(f"`Something went wrong!`")
