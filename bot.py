@@ -105,7 +105,7 @@ async def playtg(bot: Bot, message: Message):
         await message.reply_text(f"`{out}`")
         return
     
-    await vcpb.join(message.chat.id, f"{message.chat.id}.raw")
+    await vcpb.join(message.chat.id, name)
     await message.reply_text(f"`Now playing: TG-File`")
 
 bot.run()
