@@ -53,6 +53,7 @@ async def resume(bot: Bot, message: Message):
 async def youtube(bot: Bot, message: Message):
     url = ""
     slept = 0
+    sleptv2 = 0
 
     try:
         url = message.command[1]
@@ -67,6 +68,10 @@ async def youtube(bot: Bot, message: Message):
         for x in range(5):
             await message.edit_text(f"`Sleeping since {slept}/5 seconds...`")
             slept += 1
+            await sleep(1)
+        while not file_path:
+            await message.edit_text(f"`Sleeping extra {sleptv2}/5 seconds...`")
+            sleptv2 += 1
             await sleep(1)
         await message.edit_text("Joining...")
         await vcpb.join(message.chat.id, file_path)
