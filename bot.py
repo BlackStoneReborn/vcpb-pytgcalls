@@ -2,6 +2,7 @@ from pyrogram import Client as Bot, filters
 from pyrogram.types import Message
 from asyncio import sleep
 import vcpb
+import os.path
 from helpers import is_youtube
 from config import API_ID, API_HASH, BOT_TOKEN
 
@@ -51,6 +52,7 @@ async def resume(bot: Bot, message: Message):
 )
 async def youtube(bot: Bot, message: Message):
     url = ""
+    slept = 0
 
     try:
         url = message.command[1]
@@ -62,10 +64,10 @@ async def youtube(bot: Bot, message: Message):
     else:
         message = await message.reply_text("Downloading...")
         file_path = (await vcpb.youtube(url))[1]
-        await sleep(1)
-        message = await message.edit_text("Starting in 3 seconds!")
-        await sleep(3)
-        message = await message.edit_text("Joining...")
+        while not os.path.isfile(file_path):
+            await message.reply_text(f"Sleeping (since {slept}) seconds...")
+            slept += 1
+        await message.edit_text("Joining...")
         await vcpb.join(message.chat.id, file_path)
         await message.edit_text(f"`[{file_path}] Playing...`")
 
@@ -89,26 +91,7 @@ async def playfile(bot: Bot, message: Message):
     if not file_path:
         await message.reply_text("Give me a file.")
     else:
-        await sleep(2)
         await vcpb.join(message.chat.id, file_path)
         await message.reply_text(f"`[{file_path}] Playing...`")
-
-
-@bot.on_message(
-    filters.command(["playtg", "play_tg"])
-    & filters.group
-    & ~ filters.edited
-)
-async def playtg(bot: Bot, message: Message):
-    #if not message.audio:
-        #await message.reply_text(f"`Reply to a Audio-File!`")
-        #return
-    res, name, out = await vcpb.tgfile(message)
-    if not res:
-        await message.reply_text(f"`{out}`")
-        return
-    await sleep(1)
-    await vcpb.join(message.chat.id, name)
-    await message.reply_text(f"`Now playing: TG-File`")
 
 bot.run()
