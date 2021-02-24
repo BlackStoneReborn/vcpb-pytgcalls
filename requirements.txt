@@ -1,2 +1,3 @@
 httpx
 youtube-dl
+python-dotenv
