@@ -65,12 +65,8 @@ async def youtube(bot: Bot, message: Message):
     else:
         message = await message.reply_text("Downloading...")
         file_path = (await vcpb.youtube(url))[1]
-        for x in range(5):
-            await message.edit_text(f"`Sleeping since {slept}/5 seconds...`")
-            slept += 1
-            await sleep(1)
-        while not file_path:
-            await message.edit_text(f"`Sleeping extra {sleptv2} seconds, waiting to download...`")
+        while not file_path > 4:
+            await message.edit_text(f"`Sleeping since {sleptv2} seconds, waiting to download...`")
             sleptv2 += 1
             await sleep(1)
         await message.edit_text("Joining...")
