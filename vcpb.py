@@ -105,26 +105,3 @@ async def youtube(url: str):
         return True, file_name, result
 
     return False, file_name, result
-
-
-async def tgfile(message: str):
-    file_namey = f"{random_string()}.raw"
-    listy = ["group1", "group2", "group3"]
-    original = await message.reply_to_message.download(file_name=choice(listy))
-    proc = await asyncio.create_subprocess_shell(
-        'ffmpeg -i url -f s16le -ac 2 -ar 48000 -acodec pcm_s16le output'.replace(
-            "url",
-            original
-        ).replace("output", file_namey),
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE
-    )
-
-    stdout, stderr = await proc.communicate()
-
-    result = stdout or stderr
-
-    if proc.returncode == 0:
-        return True, f"'{file_namey}'", result
-
-    return False, file_namey, result
