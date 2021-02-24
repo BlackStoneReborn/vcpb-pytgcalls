@@ -123,6 +123,6 @@ async def tgfile(message: str):
     result = stdout or stderr
 
     if proc.returncode == 0:
-        return True, file_name, result
+        return True, file_namey, result
 
-    return False, file_name, result
+    return False, file_namey, result
