@@ -1,0 +1,5 @@
+*.raw
+*.session
+__pycache__
+.env
+server.env
