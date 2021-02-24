@@ -2,7 +2,6 @@ from pyrogram import Client as Bot, filters
 from pyrogram.types import Message
 
 import vcpb
-from pytgcalls import on_stream_end
 from helpers import is_youtube
 from config import API_ID, API_HASH, BOT_TOKEN
 
@@ -68,10 +67,6 @@ async def youtube(bot: Bot, message: Message):
         await asyncio.sleep(1)
         await vcpb.join(message.chat.id, file_path)
         await message.edit_text(f"`[{file_path}] Playing...`")
-        @on_stream_end
-        async def leev():
-            await vcpb.leave(message.chat.id)
-            await message.reply_text("Finished playing!")
 
 
 @bot.on_message(
