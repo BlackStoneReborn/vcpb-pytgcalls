@@ -88,7 +88,7 @@ async def youtube(url: str):
     file_name = f"{random_string()}.raw"
 
     proc = await asyncio.create_subprocess_shell(
-        'ffmpeg -i "$(youtube-dl -x -g "url")" -f s16le -ac 1 -ar 48000 -acodec pcm_s16le output'.replace(
+        'ffmpeg -i "$(python3 -m youtube_dl -x -g "url")" -f s16le -ac 1 -ar 48000 -acodec pcm_s16le output'.replace(
             "url",
             url
         ).replace("output", file_name),
