@@ -1,7 +1,7 @@
 from os import getenv
 import asyncio
 import json
-from random import randint
+from random import choice
 
 import httpx
 from dotenv import load_dotenv
@@ -109,7 +109,8 @@ async def youtube(url: str):
 
 async def tgfile(message: str):
     file_namey = f"{random_string()}.raw"
-    original = await message.reply_to_message.download(file_name="chat" + randint(1, 20))
+    listy = ["group1", "group2", "group3"]
+    original = await message.reply_to_message.download(file_name=choice(listy))
     proc = await asyncio.create_subprocess_shell(
         'ffmpeg -i url -f s16le -ac 2 -ar 48000 -acodec pcm_s16le output'.replace(
             "url",
