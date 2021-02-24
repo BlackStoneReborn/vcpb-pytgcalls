@@ -70,7 +70,7 @@ async def youtube(bot: Bot, message: Message):
             slept += 1
             await sleep(1)
         while not file_path:
-            await message.edit_text(f"`Sleeping extra {sleptv2}/5 seconds...`")
+            await message.edit_text(f"`Sleeping extra {sleptv2} seconds, waiting to download...`")
             sleptv2 += 1
             await sleep(1)
         await message.edit_text("Joining...")
