@@ -1,10 +1,11 @@
 from pyrogram import Client as Bot, filters
 from pyrogram.types import Message
 from pyrogram.errors import InviteHashExpired, InviteHashInvalid, UserAlreadyParticipant
-from asyncio import sleep
+import asyncio
 import vcpb
 import json
 import os.path
+from os import remove
 from helpers import is_youtube
 from config import API_ID, API_HASH, BOT_TOKEN
 
@@ -22,6 +23,7 @@ bot = Bot(
 )
 async def leave(bot: Bot, message: Message):
     await vcpb.leave(message.chat.id)
+    remove(f'{message.chat.id.replace("-", "")}.raw')
     await message.reply_text("Left.")
 
 @bot.on_message(
@@ -70,25 +72,42 @@ async def youtube(bot: Bot, message: Message):
 
 
 @bot.on_message(
-    filters.command(["playfile", "play_file"])
+    filters.command(["tgfile", "tg_file"])
     & filters.group
     & ~ filters.edited
 )
-async def playfile(bot: Bot, message: Message):
-    file_path = ""
+async def tgfile(bot: Bot, message: Message):
+    file_input = f'./{message.chat.id.replace("-", "")}.mp3'
+    file_path = f'{message.chat.id.replace("-", "")}.raw'
+    if "audio" in message.reply_to_message.media.document.mime_type:
+        await message.reply_to_message.download(file_name=file_input)
+    proc = await asyncio.create_subprocess_shell(
+        'ffmpeg -i puthh -f s16le -ac 1 -ar 48000 -acodec pcm_s16le output'.replace(
+            "puthh",
+            file_input
+        ).replace("output", file_path),
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE
+    )
+    stdout, stderr = await proc.communicate()
+    if not proc.returncode == 0:
+        await message.reply_text("Something went wrong with this file!")
+        return
+    remove(file_input)
 
-    try:
-        file_path = message.command[1]
-    except IndexError:
-        file_path = message.reply_to_message.text
+    if message.reply_to_message.media.document.attributes.title:
+        title = message.reply_to_message.media.document.attributes.title
+    if message.reply_to_message.media.document.attributes.performer:
+        performer = message.reply_to_message.media.document.attributes.performer
 
-    if "[" in file_path:
-        file_path = file_path.split()[0][:-1][1:]
-
-    if not file_path:
-        await message.reply_text("Give me a file.")
-    else:
-        await vcpb.join(message.chat.id, file_path)
-        await message.reply_text(f"`[{file_path}] Playing...`")
+    await vcpb.join(message.chat.id, file_path)
+    if title and performer:
+        await message.reply_text(f"NOW PLAYING\n\nSong: {title}\nFrom: {performer}")
+    elif title and not performer:
+        await message.reply_text(f"NOW PLAYING\n\nSong: {title}")
+    elif not title and performer:
+        await message.reply_text(f"NOW PLAYING\n\nSong: Unknown\nFrom: {performer}")
+    elif not title and not performer:
+        await message.reply_text(f"NOW PLAYING\n\nSong: TG-File")
 
 bot.run()
