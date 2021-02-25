@@ -90,6 +90,7 @@ async def tgfile(bot: Bot, message: Message):
         stderr=asyncio.subprocess.PIPE
     )
     stdout, stderr = await proc.communicate()
+    print(stdout or stderr)
     if not proc.returncode == 0:
         await message.reply_text("Something went wrong with this file!")
         return
