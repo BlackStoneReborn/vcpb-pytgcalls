@@ -94,20 +94,6 @@ async def tgfile(bot: Bot, message: Message):
         await message.reply_text("Something went wrong with this file!")
         return
     remove(file_input)
-
-    if message.reply_to_message.media.document.attributes.title:
-        title = message.reply_to_message.media.document.attributes.title
-    if message.reply_to_message.media.document.attributes.performer:
-        performer = message.reply_to_message.media.document.attributes.performer
-
-    await vcpb.join(message.chat.id, file_path)
-    if title and performer:
-        await message.reply_text(f"NOW PLAYING\n\nSong: {title}\nFrom: {performer}")
-    elif title and not performer:
-        await message.reply_text(f"NOW PLAYING\n\nSong: {title}")
-    elif not title and performer:
-        await message.reply_text(f"NOW PLAYING\n\nSong: Unknown\nFrom: {performer}")
-    elif not title and not performer:
-        await message.reply_text(f"NOW PLAYING\n\nSong: TG-File")
+    await message.reply_text(f"NOW PLAYING\n\nTG-File")
 
 bot.run()
