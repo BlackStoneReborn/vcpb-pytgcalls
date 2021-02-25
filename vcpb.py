@@ -85,7 +85,8 @@ async def resume(chat_id: int) -> httpx.Response:
     )
 
 
-async def youtube(url: str, cid: str):
+async def youtube(url: str, cids: str):
+    cid = str(cids)
     file_name = f'{cid.replace("-", "")}.raw'
 
     proc = await asyncio.create_subprocess_shell(
