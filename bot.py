@@ -26,7 +26,7 @@ async def leave(bot: Bot, message: Message):
     await message.reply_text("Left.")
 
 
-@pytgcalls.on_stream_end()
+@PyTgCalls.on_stream_end()
 async def leaveend(_):
     print(_)
     await vcpb.leave(_)
