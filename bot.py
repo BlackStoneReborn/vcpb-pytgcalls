@@ -1,10 +1,12 @@
 from pyrogram import Client as Bot, filters
 from pyrogram.types import Message
+from pyrogram.errors import InviteHashExpired, InviteHashInvalid, UserAlreadyParticipant
 from asyncio import sleep
 import vcpb
 import os.path
 from helpers import is_youtube
 from config import API_ID, API_HASH, BOT_TOKEN
+from server import telegram_client as User
 
 
 bot = Bot(
@@ -49,25 +51,30 @@ async def resume(bot: Bot, message: Message):
     & filters.group
     & ~ filters.edited
 )
-async def youtube(bot: Bot, message: Message):
+async def youtube(bot: Bot, message: Message, user: User):
     url = ""
-    slept = 0
-    sleptv2 = 0
-
     try:
         url = message.command[1]
     except IndexError:
         url = message.reply_to_message.text
+
+    if message.chat.username:
+        chat_invite_link = message.chat.username
+    else:
+        chat_invite_link = await message.chat.export_invite_link()
+
+    try:
+        await user.join_chat(chat_invite_link)
+    except UserAlreadyParticipant:
+        pass
+    except (InviteHashExpired, InviteHashInvalid) as e:
+        await message.reply_text("Please try again.")
 
     if not is_youtube(url):
         await message.reply_text("Give me a YouTube link.")
     else:
         message = await message.reply_text("Downloading...")
         file_path = (await vcpb.youtube(url))[1]
-        while file_path == "":
-            await message.edit_text(f"`Sleeping since {sleptv2} seconds, waiting to download...`")
-            sleptv2 += 1
-            await sleep(1)
         await message.edit_text("Joining...")
         await vcpb.join(message.chat.id, file_path)
         await message.edit_text(f"`[{file_path}] Playing...`")
