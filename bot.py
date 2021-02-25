@@ -6,7 +6,6 @@ import vcpb
 import os.path
 from helpers import is_youtube
 from config import API_ID, API_HASH, BOT_TOKEN
-from server import telegram_client as User
 
 
 bot = Bot(
@@ -51,7 +50,7 @@ async def resume(bot: Bot, message: Message):
     & filters.group
     & ~ filters.edited
 )
-async def youtube(bot: Bot, message: Message, user: User):
+async def youtube(bot: Bot, message: Message):
     url = ""
     try:
         url = message.command[1]
@@ -62,6 +61,7 @@ async def youtube(bot: Bot, message: Message, user: User):
         await message.reply_text("Give me a YouTube link.")
     else:
         if not message.chat.username:
+            from server import telegram_client as user
             chat_invite_link = await message.chat.export_invite_link()
             try:
                 await user.join_chat(chat_invite_link)
@@ -69,6 +69,8 @@ async def youtube(bot: Bot, message: Message, user: User):
                 pass
             except (InviteHashExpired, InviteHashInvalid) as e:
                 await message.reply_text("Please try again.")
+            except Exception as e:
+                await message.reply_text("Something bad happened!")
         message = await message.reply_text("Downloading...")
         file_path = (await vcpb.youtube(url))[1]
         await message.edit_text("Joining...")
