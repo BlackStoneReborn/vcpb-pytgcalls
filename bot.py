@@ -94,6 +94,7 @@ async def tgfile(bot: Bot, message: Message):
         await message.reply_text("Something went wrong with this file!")
         return
     remove(file_input)
+    await vcpb.join(message.chat.id, file_path)
     await message.reply_text(f"NOW PLAYING\n\nTG-File")
 
 bot.run()
