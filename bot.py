@@ -23,7 +23,7 @@ bot = Bot(
 )
 async def leave(bot: Bot, message: Message):
     await vcpb.leave(message.chat.id)
-    remove(f'{message.chat.id.replace("-", "")}.raw')
+    remove(f'{str(message.chat.id).replace("-", "")}.raw')
     await message.reply_text("Left.")
 
 @bot.on_message(
