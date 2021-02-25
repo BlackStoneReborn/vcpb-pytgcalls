@@ -77,8 +77,8 @@ async def youtube(bot: Bot, message: Message):
     & ~ filters.edited
 )
 async def tgfile(bot: Bot, message: Message):
-    file_input = f'./{message.chat.id.replace("-", "")}.mp3'
-    file_path = f'{message.chat.id.replace("-", "")}.raw'
+    file_input = f'./{str(message.chat.id).replace("-", "")}.mp3'
+    file_path = f'{str(message.chat.id).replace("-", "")}.raw'
     if "audio" in message.reply_to_message.media.document.mime_type:
         await message.reply_to_message.download(file_name=file_input)
     proc = await asyncio.create_subprocess_shell(
