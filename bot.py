@@ -59,23 +59,15 @@ async def youtube(bot: Bot, message: Message):
 
     if not is_youtube(url):
         await message.reply_text("Give me a YouTube link.")
-    else:
-        if not message.chat.username:
-            from server import telegram_client as user
-            chat_invite_link = await message.chat.export_invite_link()
-            try:
-                await user.join_chat(chat_invite_link)
-            except UserAlreadyParticipant:
-                pass
-            except (InviteHashExpired, InviteHashInvalid) as e:
-                await message.reply_text("Please try again.")
-            except Exception as e:
-                await message.reply_text("Something bad happened!")
-        message = await message.reply_text("Downloading...")
-        file_path = (await vcpb.youtube(url))[1]
-        await message.edit_text("Joining...")
-        await vcpb.join(message.chat.id, file_path)
-        await message.edit_text(f"`[{file_path}] Playing...`")
+        return
+    if not message.chat.username:
+        await message.reply_text("This chat is not public! Please set it a username to use me.")
+        return
+    message = await message.reply_text("Downloading...")
+    file_path = (await vcpb.youtube(url))[1]
+    await message.edit_text("Joining...")
+    await vcpb.join(message.chat.id, file_path)
+    await message.edit_text(f"`[{file_path}] Playing...`")
 
 
 @bot.on_message(
