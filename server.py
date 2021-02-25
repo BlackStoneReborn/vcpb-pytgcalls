@@ -15,7 +15,7 @@ open("server.env", "w+").write(
 @pytgcalls.on_stream_end()
 def onend(chat):
     pytgcalls.leave_group_call(chat)
-    remove(f"{chat.replace("-", "")}.raw")
+    remove(f'{chat.replace("-", "")}.raw')
 
 
 pytgcalls.run(telegram_client)
