@@ -3,6 +3,7 @@ from pyrogram.types import Message
 from pyrogram.errors import InviteHashExpired, InviteHashInvalid, UserAlreadyParticipant
 from asyncio import sleep
 import vcpb
+import json
 import os.path
 from helpers import is_youtube
 from config import API_ID, API_HASH, BOT_TOKEN
