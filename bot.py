@@ -63,7 +63,7 @@ async def youtube(bot: Bot, message: Message):
         await message.reply_text("This chat is not public! Please set it a username to use me.")
         return
     message = await message.reply_text("Downloading...")
-    file_path = (await vcpb.youtube(url))[1]
+    file_path = (await vcpb.youtube(url, message.chat.id))[1]
     await message.edit_text("Joining...")
     await vcpb.join(message.chat.id, file_path)
     await message.edit_text(f"`[{file_path}] Playing...`")
