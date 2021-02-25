@@ -64,7 +64,7 @@ async def youtube(bot: Bot, message: Message):
     if not message.chat.username:
         await message.reply_text("This chat is not public! Please set it a username to use me.")
         return
-    message = await message.reply_text("Downloading...")
+    message = await message.reply_text("Downloading & converting...")
     file_path = (await vcpb.youtube(url, message.chat.id))[1]
     await message.edit_text("Joining...")
     await vcpb.join(message.chat.id, file_path)
@@ -81,6 +81,10 @@ async def tgfile(bot: Bot, message: Message):
     file_path = f'{str(message.chat.id).replace("-", "")}.raw'
     if message.reply_to_message.media:
         await message.reply_to_message.download(file_name=f'./{str(message.chat.id).replace("-", "")}.mp3')
+    else:
+        await message.reply_text("Reply to a TG audio file (mp3).")
+        return
+    messagey = await message.reply_text("Downloading & converting...")
     proc = await asyncio.create_subprocess_shell(
         'ffmpeg -i puthh -f s16le -ac 1 -ar 48000 -acodec pcm_s16le output'.replace(
             "puthh",
@@ -91,10 +95,10 @@ async def tgfile(bot: Bot, message: Message):
     )
     stdout, stderr = await proc.communicate()
     if not proc.returncode == 0:
-        await message.reply_text("Something went wrong with this file!")
+        await messagey.edit_text("Something went wrong with this file!")
         return
     remove(file_input)
     await vcpb.join(message.chat.id, file_path)
-    await message.reply_text(f"NOW PLAYING\n\nTG-File")
+    await messagey.edit_text(f"Playing!")
 
 bot.run()
