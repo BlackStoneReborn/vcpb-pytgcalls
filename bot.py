@@ -5,7 +5,7 @@ import vcpb
 import os.path
 from helpers import is_youtube
 from config import API_ID, API_HASH, BOT_TOKEN
-import pytgcalls
+from pytgcalls import pytgcalls
 
 
 bot = Bot(
