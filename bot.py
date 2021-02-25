@@ -58,21 +58,17 @@ async def youtube(bot: Bot, message: Message, user: User):
     except IndexError:
         url = message.reply_to_message.text
 
-    if message.chat.username:
-        chat_invite_link = message.chat.username
-    else:
-        chat_invite_link = await message.chat.export_invite_link()
-
-    try:
-        await user.join_chat(chat_invite_link)
-    except UserAlreadyParticipant:
-        pass
-    except (InviteHashExpired, InviteHashInvalid) as e:
-        await message.reply_text("Please try again.")
-
     if not is_youtube(url):
         await message.reply_text("Give me a YouTube link.")
     else:
+        if not message.chat.username:
+            chat_invite_link = await message.chat.export_invite_link()
+            try:
+                await user.join_chat(chat_invite_link)
+            except UserAlreadyParticipant:
+                pass
+            except (InviteHashExpired, InviteHashInvalid) as e:
+                await message.reply_text("Please try again.")
         message = await message.reply_text("Downloading...")
         file_path = (await vcpb.youtube(url))[1]
         await message.edit_text("Joining...")
