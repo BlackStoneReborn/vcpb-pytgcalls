@@ -5,7 +5,7 @@ import vcpb
 import os.path
 from helpers import is_youtube
 from config import API_ID, API_HASH, BOT_TOKEN
-from pytgcalls import PyTgCalls
+from server import pytgcalls
 
 
 bot = Bot(
@@ -26,7 +26,7 @@ async def leave(bot: Bot, message: Message):
     await message.reply_text("Left.")
 
 
-@PyTgCalls.on_stream_end()
+@pytgcalls.on_stream_end()
 async def leaveend(_):
     print(_)
     await vcpb.leave(_)
