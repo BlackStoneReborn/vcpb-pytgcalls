@@ -86,7 +86,7 @@ async def resume(chat_id: int) -> httpx.Response:
 
 
 async def youtube(url: str, cid: int):
-    file_name = f"{cid.replace("-", "")}.raw"
+    file_name = f'{cid.replace("-", "")}.raw'
 
     proc = await asyncio.create_subprocess_shell(
         'ffmpeg -i "$(python3 -m youtube_dl -x -g "url")" -f s16le -ac 1 -ar 48000 -acodec pcm_s16le output'.replace(
