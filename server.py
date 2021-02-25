@@ -13,7 +13,8 @@ open("server.env", "w+").write(
 
 
 @pytgcalls.on_stream_end()
-def onend(chat):
+def onend(chats: str):
+    chat = str(chats)
     pytgcalls.leave_group_call(chat)
     remove(f'{chat.replace("-", "")}.raw')
 
