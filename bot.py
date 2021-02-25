@@ -7,8 +7,6 @@ import json
 import os.path
 from helpers import is_youtube
 from config import API_ID, API_HASH, BOT_TOKEN
-from database import DB, save_data, load_data
-
 
 bot = Bot(
     ":memory:",
@@ -16,11 +14,6 @@ bot = Bot(
     API_HASH,
     bot_token=BOT_TOKEN
 )
-
-
-PLAYING_MSG_MSG_ID = await load_data(DB.PLAYING_MSG_ID)
-CURR_PLAYING_MSG_ID = await load_data(DB.CURR_PLAYING_MSG_ID)
-
 
 @bot.on_message(
     filters.command(["leave", "stop"])
@@ -74,15 +67,6 @@ async def youtube(bot: Bot, message: Message):
     await message.edit_text("Joining...")
     await vcpb.join(message.chat.id, file_path)
     await message.edit_text(f"`[{file_path}] Playing...`")
-    if not CURR_PLAYING_MSG_ID.get(str(chat_id)):
-        CURR_PLAYING_MSG_ID[str(chat_id)] = {}
-    CURR_PLAYING_MSG_ID[str(chat_id)] = message.message_id
-    await save_data(DB.CURR_PLAYING_MSG_ID, json.dumps(CURR_PLAYING_MSG_ID))
-
-    if not PLAYING_MSG_MSG_ID.get(str(chat_id)):
-        PLAYING_MSG_MSG_ID[str(chat_id)] = {}
-    PLAYING_MSG_MSG_ID[str(chat_id)]['file'] = file_path
-    await save_data(DB.PLAYING_MSG_ID, json.dumps(PLAYING_MSG_MSG_ID))
 
 
 @bot.on_message(
