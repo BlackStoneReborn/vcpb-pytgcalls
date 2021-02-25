@@ -77,10 +77,10 @@ async def youtube(bot: Bot, message: Message):
     & ~ filters.edited
 )
 async def tgfile(bot: Bot, message: Message):
-    file_input = f'./{str(message.chat.id).replace("-", "")}.mp3'
+    file_input = f'{str(message.chat.id).replace("-", "")}.mp3'
     file_path = f'{str(message.chat.id).replace("-", "")}.raw'
     if message.reply_to_message.media:
-        await message.reply_to_message.download(file_name=file_input)
+        await message.reply_to_message.download(file_name=f'./{str(message.chat.id).replace("-", "")}.mp3')
     proc = await asyncio.create_subprocess_shell(
         'ffmpeg -i puthh -f s16le -ac 1 -ar 48000 -acodec pcm_s16le output'.replace(
             "puthh",
