@@ -10,4 +10,11 @@ open("server.env", "w+").write(
         f"{k}={v!r}" for k, v in {"HOST": pytgcalls._host, "PORT": pytgcalls._port, "SESSION_ID": pytgcalls._session_id}.items()
     )
 )
+
+
+@pytgcalls.on_stream_end()
+def __(_):
+    pytgcalls.leave_group_call(_)
+
+
 pytgcalls.run(telegram_client)
